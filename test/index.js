@@ -19,17 +19,44 @@ describe('Index', function() {
         if (err) {
           throw err;
         }
-      
+
         magic.detectFile(output, function(err, result) {
           if (err) {
-            throw err;
+            // throw err;
+            assert(!err.isNullOrUndefined);
           }
-      
           // result=>PNG image data, 60 x 60, 8-bit/color RGBA, non-interlaced
           result.should.match(/non-interlaced/);
           fs.unlinkSync(output);
           done();
         });
+      });
+    });
+
+    it('should handle malicious files safely', function(done) {
+      var input = path.join(__dirname, 'img', 'testcase.png');
+      var output = path.join(__dirname, 'img', 'testcase-new.png');
+
+      pngdefry(input, output, function(err) {
+        if (err) {
+          // throw err;
+          // assert(!err.isNullOrUndefined);
+          console.log('[!] ' + err.toString());
+          // fs.unlinkSync(output);
+
+
+          done();
+        }
+
+        // magic.detectFile(output, function(err, result) {
+        // //   if (err) {
+        // //     throw err;
+        // //   }
+        // //   // result=>PNG image data, 60 x 60, 8-bit/color RGBA, non-interlaced
+        // //   result.should.match(/non-interlaced/);
+        // //   fs.unlinkSync(output);
+        // //   done();
+        // });
       });
     });
   });
